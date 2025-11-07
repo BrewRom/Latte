@@ -52,6 +52,7 @@
         const DPADDOWN = 13;
         const DPADLEFT = 14;
         const DPADRIGHT = 15;
+        const FACEA = 0;
         
         function resetActiveScale() {
             const el = document.getElementById(active);
@@ -128,6 +129,10 @@
                     active -= 5;
                     setCursorPositionToActive();
                 }
+            }
+
+            if (isButtonPressed(FACEA)) {
+                window.location.href="/nes?rom=rom.nes"
             }
 
             start = requestAnimationFrame(gamepadLoop);

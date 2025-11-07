@@ -10,7 +10,7 @@
     "typescript": "^5"
   },
   "scripts": {
-    "dev": "bun run src/index.ts"
+    "dev": "bun --hot run src/index.ts"
   },
   "dependencies": {
     "@types/react-dom": "^19.2.2",
