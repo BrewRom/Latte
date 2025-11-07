@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/style" />
     <link rel="icon" href="data:,">
-    <title>Document</title>
+    <title>Latte</title>
 </head>
 <body>
     <main>
@@ -53,6 +53,11 @@
         const DPADLEFT = 14;
         const DPADRIGHT = 15;
         
+        function resetActiveScale() {
+            const el = document.getElementById(active);
+            el.style.scale = "1";
+        }
+        
         function setCursorPositionToActive() {
             const el = document.getElementById(active);
             const rect = el.getBoundingClientRect();
@@ -62,6 +67,9 @@
             cursor.style.top = `${rect.top}px`;
             cursor.style.right = `${rect.right}px`;
             cursor.style.bottom = `${rect.bottom}px`;
+            cursor.style.scale = "1.05";
+
+            el.style.scale = "1.05";
         }
 
         function isButtonPressed(button) {
@@ -92,6 +100,7 @@
 
             if (isButtonPressed(DPADRIGHT)) {
                 if (active % 5 != 4) {
+                    resetActiveScale();
                     active += 1;
                     setCursorPositionToActive();
                 }
@@ -99,6 +108,7 @@
 
             if (isButtonPressed(DPADLEFT)) {
                 if (active % 5 != 0) {
+                    resetActiveScale();
                     active -= 1;
                     setCursorPositionToActive();
                 }
@@ -106,6 +116,7 @@
 
             if (isButtonPressed(DPADDOWN)) {
                 if (active % 15 != 10) {
+                    resetActiveScale();
                     active += 5;
                     setCursorPositionToActive();
                 }
@@ -113,6 +124,7 @@
 
             if (isButtonPressed(DPADUP)) {
                 if (active % 15 != 0) {
+                    resetActiveScale();
                     active -= 5;
                     setCursorPositionToActive();
                 }
@@ -135,6 +147,7 @@
         })
 
         window.onresize = () => {
+            resetActiveScale();
             setCursorPositionToActive();
         }
         
