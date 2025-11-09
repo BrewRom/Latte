@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="icon" href="data:,">
     <title>Latte</title>
 </head>
+
 <body>
     <main>
         <div class="page-container">
@@ -38,7 +40,7 @@
             <div class="box" id="13"></div>
             <div class="box" id="14"></div>
         </div>
-        
+
         <div id="cursor" class="cursor" src="/files/Cursor.png"></div>
     </main>
     <script>
@@ -53,12 +55,12 @@
         const DPADLEFT = 14;
         const DPADRIGHT = 15;
         const FACEA = 0;
-        
+
         function resetActiveScale() {
             const el = document.getElementById(active);
             el.style.scale = "1";
         }
-        
+
         function setCursorPositionToActive() {
             const el = document.getElementById(active);
             const rect = el.getBoundingClientRect();
@@ -86,7 +88,40 @@
             return false;
         }
 
-        
+        function moveActiveLeft() {
+            if (active % 5 > 0) {
+                resetActiveScale();
+                active -= 1;
+                setCursorPositionToActive();
+            }
+        }
+
+        function moveActiveDown() {
+            console.log(active % 15);
+            if (active % 15 < 10) {
+                resetActiveScale();
+                active += 5;
+                setCursorPositionToActive();
+            }
+        }
+
+        function moveActiveRight() {
+            if (active % 5 < 4) {
+                resetActiveScale();
+                active += 1;
+                setCursorPositionToActive();
+            }
+        }
+
+        function moveActiveUp() {
+            if (active % 15 > 0) {
+                resetActiveScale();
+                active -= 5;
+                setCursorPositionToActive();
+            }
+        }
+
+
         function gamepadLoop() {
             const gamepads = navigator.getGamepads();
             const gp = gamepads[0];
@@ -100,39 +135,23 @@
             }
 
             if (isButtonPressed(DPADRIGHT)) {
-                if (active % 5 != 4) {
-                    resetActiveScale();
-                    active += 1;
-                    setCursorPositionToActive();
-                }
+                moveActiveRight();
             }
 
             if (isButtonPressed(DPADLEFT)) {
-                if (active % 5 != 0) {
-                    resetActiveScale();
-                    active -= 1;
-                    setCursorPositionToActive();
-                }
+                moveActiveLeft();
             }
 
             if (isButtonPressed(DPADDOWN)) {
-                if (active % 15 != 10) {
-                    resetActiveScale();
-                    active += 5;
-                    setCursorPositionToActive();
-                }
+                moveActiveDown();
             }
 
             if (isButtonPressed(DPADUP)) {
-                if (active % 15 != 0) {
-                    resetActiveScale();
-                    active -= 5;
-                    setCursorPositionToActive();
-                }
+                moveActiveUp();
             }
 
             if (isButtonPressed(FACEA)) {
-                window.location.href="/nes?rom=rom.nes"
+                window.location.href = "/nes?rom=rom.nes"
             }
 
             start = requestAnimationFrame(gamepadLoop);
@@ -143,7 +162,24 @@
             console.log("Loaded")
             setCursorPositionToActive();
         }
-        
+
+        window.addEventListener("keypress", (ev) => {
+            switch (ev.key) {
+                case "a":
+                    moveActiveLeft();
+                    break;
+                case "d":
+                    moveActiveRight();
+                    break;
+                case "w":
+                    moveActiveUp();
+                    break;
+                case "s":
+                    moveActiveDown();
+                    break;
+            }
+        })
+
         window.addEventListener("gamepadconnected", (ev) => {
             console.log(`Gamepad is now connected: ${ev.gamepad.id}`);
             gamepadId = ev.gamepad.id;
@@ -155,7 +191,8 @@
             resetActiveScale();
             setCursorPositionToActive();
         }
-        
+
     </script>
 </body>
+
 </html>
