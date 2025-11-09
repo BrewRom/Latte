@@ -1,0 +1,84 @@
+* {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+body {
+    min-width: 100vw;
+    min-height: 100vh;
+    background-color: #242424;
+    color: whitesmoke;
+    overflow: hidden;
+}
+
+main {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon-container {
+    display: grid;
+    grid-template-columns: 22vh 22vh 22vh 22vh 22vh;
+    grid-template-rows: 22vh 22vh 22vh;
+    margin-top: 20vh;
+}
+
+.box {
+    width: 18vh;
+    height: 18vh;
+    background-color: #D9D9D9;
+    border-radius: 24px;
+    box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.253);
+}
+
+.box img {
+    max-width: 18vh;
+    max-height: 18vh;
+    border-radius: 24px;
+    box-shadow: 4px 4px 4px black;
+    border: 8px linear-gradient(to right, #ffffff 0%, rgba(0,0,0,0) 100%);;
+    box-sizing: border-box;
+    animation: ease-out;
+    animation-name: spawnAnimation;
+    animation-duration: 500ms; 
+}
+
+.cursor {
+    position: fixed;
+    width: 18.2vh;
+    height: 18.2vh;
+    border: 0.8vh solid lightcoral;
+    box-sizing: border-box;
+    border-radius: 20px;
+    animation: ease-out;
+    animation-name: spawnAnimation;
+    animation-duration: 500ms; 
+}
+
+
+.page-container {
+    display: flex;
+}
+
+
+.page {
+    width: 2vh;
+    height: 2vh;
+    background-color: #D9D9D9;
+    border-radius: 50%;
+    margin: 0.5vh;
+}
+
+.page.active {
+    background-color: lightcoral;
+}
+
+@keyframes spawnAnimation {
+    0% { transform: scale(0)}
+    50% { transform: scale(1.1);}
+    100% {transform: scale(1)}
+}
