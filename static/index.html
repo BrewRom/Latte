@@ -187,6 +187,11 @@
                 case "s":
                     moveActiveDown();
                     break;
+                case " ":
+                    window.location.href = "/nes?rom=rom.nes";
+                    break;
+                default:
+                    console.log(ev);
             }
         })
 

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:,">
+    <title>NES</title>
+</head>
+<body>
+    <style>
+        body {
+            width: 100vw;
+            height: 100vh;
+            background-color: black;
+            color: white;
+        }
+
+        main {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;;
+        }
+
+        canvas {
+            background-color: white;
+            border-radius: 24px;
+        }
+    </style>
+    <main>
+        <canvas id="game" width="256" height="224"></canvas>
+    </main>
+    <script>
+        // Calculate how large a screen can be
+        function calculateCanvasSize() {
+            const vWidth = window.innerWidth;
+            const vHeight = window.innerHeight;
+
+            const gWidth = Math.floor(vWidth / 256);
+            const gHeight = Math.floor(vHeight / 224);
+
+            const scale = Math.min(gWidth, gHeight);
+
+            const canvas = document.getElementById("game");
+            canvas.width = scale * 256;
+            canvas.height = scale * 224;
+        }
+
+        window.onload = () => {
+            calculateCanvasSize();
+        }
+
+        window.addEventListener("resize", () => {
+            // Recalculate canvas size
+            calculateCanvasSize();
+        })
+
+    </script>
+</body>
+</html>

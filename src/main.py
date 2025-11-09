@@ -12,6 +12,11 @@ app.mount("/static", fastapi.staticfiles.StaticFiles(directory="static"), "stati
 def root():
     return fastapi.responses.FileResponse("static/index.html")
 
+@app.get('/nes')
+def load_nes():
+    return fastapi.responses.FileResponse("static/nes.html");
+    
+
 async def start_server():
     config = uvicorn.Config(app, "0.0.0.0", 42069)
     server = uvicorn.Server(config)
