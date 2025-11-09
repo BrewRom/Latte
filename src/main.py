@@ -2,6 +2,7 @@ import fastapi
 import fastapi.staticfiles
 import fastapi.responses
 import uvicorn
+import json
 import asyncio
 
 app = fastapi.FastAPI()
@@ -15,7 +16,14 @@ def root():
 @app.get('/nes')
 def load_nes():
     return fastapi.responses.FileResponse("static/nes.html");
-    
+
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: fastapi.WebSocket):
+    await websocket.accept()
+    while True:
+        data = await websocket.receive_text()
+        parsed = json.loads(data)
+        
 
 async def start_server():
     config = uvicorn.Config(app, "0.0.0.0", 42069)
