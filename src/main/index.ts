@@ -4,6 +4,7 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { spawn } from 'child_process'
 import icon from '../../resources/icon.png?asset'
 import path from 'path'
+import * as fs from 'fs'
 
 function createWindow(): void {
   // Create the browser window.
@@ -84,3 +85,16 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+// On start it should check if its config file exists
+// If not then create the config location in the .config folder in home
+// This is where we would store information such as the location of the background image
+
+const configFolder = '/home/hazy/.config/latte/config'
+try {
+  if (!fs.existsSync(configFolder)) {
+    fs.mkdirSync(configFolder)
+  }
+} catch (err) {
+  console.error(err)
+}

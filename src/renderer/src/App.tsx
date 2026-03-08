@@ -4,16 +4,12 @@ function App(): React.JSX.Element {
   const [count, setCount] = useState(100)
 
   useEffect(() => {
-    window.electronAPI.onControllerInput((data) => {
+    window.electronAPI.onControllerInput((_data) => {
       setCount((c) => c - 1)
     })
   }, [])
 
-  return (
-    <>
-      <p>{count}</p>
-    </>
-  )
+  return <></>
 }
 
 export default App
