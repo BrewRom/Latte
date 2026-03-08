@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, protocol, net } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { spawn } from 'child_process'
@@ -6,14 +6,31 @@ import icon from '../../resources/icon.png?asset'
 import path from 'path'
 import * as fs from 'fs'
 
+function handleOpenConfig(): string {
+  const content = fs.readFileSync('/home/hazy/.config/latte/config/latte.json', 'utf-8')
+  return content
+}
+protocol.registerSchemesAsPrivileged([
+  {
+    scheme: 'latte',
+    privileges: {
+      secure: true,
+      supportFetchAPI: true, // Important for net.fetch
+      standard: true,
+      bypassCSP: true,
+      stream: true
+    }
+  }
+])
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 1280,
     height: 800,
     show: false,
+    resizable: false,
     fullscreen: false, //Set to true on final build
-    autoHideMenuBar: false,
+    autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -39,6 +56,22 @@ function createWindow(): void {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
 
+  // On start it should check if its config file exists
+  // If not then create the config location in the .config folder in home
+  // This is where we would store information such as the location of the background image
+
+  const configFolder = '/home/hazy/.config/latte/config'
+  try {
+    if (!fs.existsSync(configFolder)) {
+      fs.mkdirSync(configFolder)
+      fs.copyFileSync('latte.json', '/home/hazy/.config/latte/config/latte.json')
+    }
+
+    console.log('Config folder exists')
+  } catch (err) {
+    console.error(err)
+  }
+
   const file = app.isPackaged ? path.join(process.resourcesPath, 'controller') : './controller'
   const child = spawn(file)
 
@@ -61,6 +94,16 @@ app.whenReady().then(() => {
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
+
+  // Handle requests for the custom protocol
+  protocol.handle('latte', (request) => {
+    const filePath = new URL(request.url).pathname
+    // Ensure correct path resolution across platforms
+    const absolutePath = path.normalize(filePath)
+    return net.fetch(`file://${absolutePath}`)
+  })
+
+  ipcMain.handle('loadConfig', handleOpenConfig)
 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
@@ -85,16 +128,3 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
-
-// On start it should check if its config file exists
-// If not then create the config location in the .config folder in home
-// This is where we would store information such as the location of the background image
-
-const configFolder = '/home/hazy/.config/latte/config'
-try {
-  if (!fs.existsSync(configFolder)) {
-    fs.mkdirSync(configFolder)
-  }
-} catch (err) {
-  console.error(err)
-}

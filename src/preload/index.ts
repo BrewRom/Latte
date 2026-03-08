@@ -17,7 +17,8 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld('electronAPI', {
       onControllerInput: (callback) =>
         ipcRenderer.on('controller-input', (_event, value) => callback(value)),
-      removeOutputListener: () => ipcRenderer.removeAllListeners('controller-input')
+      removeOutputListener: () => ipcRenderer.removeAllListeners('controller-input'),
+      openLoadConfig: () => ipcRenderer.invoke('loadConfig')
     })
   } catch (error) {
     console.error(error)
