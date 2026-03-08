@@ -5,11 +5,10 @@ import { spawn } from 'child_process'
 import icon from '../../resources/icon.png?asset'
 import path from 'path'
 import * as fs from 'fs'
+import { setHandles } from './funcs'
 
-function handleOpenConfig(): string {
-  const content = fs.readFileSync('/home/hazy/.config/latte/config/latte.json', 'utf-8')
-  return content
-}
+
+
 protocol.registerSchemesAsPrivileged([
   {
     scheme: 'latte',
@@ -22,6 +21,7 @@ protocol.registerSchemesAsPrivileged([
     }
   }
 ])
+
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -103,7 +103,7 @@ app.whenReady().then(() => {
     return net.fetch(`file://${absolutePath}`)
   })
 
-  ipcMain.handle('loadConfig', handleOpenConfig)
+  setHandles();
 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
